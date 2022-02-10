@@ -21,16 +21,19 @@ public class TicTacToeGrid : Matrix
 
     private bool winDeclared = false;
 
+    // This method is not a method and a constructor
     public TicTacToeGrid(int rows, int cols) : base(rows, cols)
     {
         
     }
 
+    // This method is not a method and a constructor
     public TicTacToeGrid(float[,] inputArray) : base(inputArray)
     {
 
     }
 
+    // This method initializes cells according to the input values for the constructor and saves them in a list
     public void InitializeCells()
     {
         for (int x = 0; x < GetNoOfRows(); x++)
@@ -48,6 +51,7 @@ public class TicTacToeGrid : Matrix
         onAllCellsDone?.Invoke();
     }
 
+    // This method is an overridden method which is being called in the base class whenever data is changed there in any method
     public override void OnMatrixUpdate()
     {
         for (int x = 0; x < GetNoOfRows(); x++)
@@ -59,6 +63,7 @@ public class TicTacToeGrid : Matrix
         }
     }
 
+    // This method sets matrix value according to current turn variable
     public void TakeTurn(int rows, int cols)
     {
         if(GetValue(rows, cols) == 0 && !winDeclared)
@@ -68,6 +73,7 @@ public class TicTacToeGrid : Matrix
         }
     }
 
+    // This method changes the current turn variable
     void ChangeTurn()
     {
         if(currentTurn == Cell.Status.cross)
@@ -79,6 +85,7 @@ public class TicTacToeGrid : Matrix
         }
     }
 
+    // This method is called to do appropriate tasks when someone wins
     public void OnWin()
     {
         if (!CheckWin()) return;
@@ -100,9 +107,11 @@ public class TicTacToeGrid : Matrix
             SetInverseDiagnol((int)Cell.Status.win);
         }
         winDeclared = true;
-        Debug.Log("Game End. Player Won");
+        ChangeTurn();
+        Debug.Log("Game End: " + currentTurn.ToString() + " Won");
     }
 
+    // This method to perform appropriate tasks when the game draws
     public void OnDraw()
     {
         if (winDeclared) return;
@@ -113,6 +122,7 @@ public class TicTacToeGrid : Matrix
         }
     }
 
+    // This method checks if the game is won or not
     public bool CheckWin()
     {
         if(CheckRowsWin() || CheckColsWin() || CheckDiagnolWin() || CheckInverseDiagnolWin())
@@ -122,6 +132,7 @@ public class TicTacToeGrid : Matrix
         return false;
     }
 
+    // This method checks if any of the rows are same or not
     public bool CheckRowsWin()
     {
         for (int x = 0; x < GetNoOfRows(); x++)
@@ -135,6 +146,7 @@ public class TicTacToeGrid : Matrix
         return false;
     }
 
+    // This method checks if any of the columns is same or not
     public bool CheckColsWin()
     {
         for (int x = 0; x < GetNoOfColumns(); x++)
@@ -148,6 +160,7 @@ public class TicTacToeGrid : Matrix
         return false;
     }
 
+    // This method checks if the diagnol is same or not
     public bool CheckDiagnolWin()
     {
         if(IsDiagnolSame() && GetValue(0, 0) != 0)
@@ -157,6 +170,7 @@ public class TicTacToeGrid : Matrix
         return false;
     }
 
+    // This method checks if inverse diagnol is same or not
     public bool CheckInverseDiagnolWin()
     {
         if (IsInverseDiagnolSame() && GetValue(0, GetNoOfColumns()-1) != 0)
@@ -166,6 +180,7 @@ public class TicTacToeGrid : Matrix
         return false;
     }
 
+    // This method checks if the game is draw or not
     public bool CheckDraw()
     {
         if (CheckWin()) return false;

@@ -34,6 +34,7 @@ public class TicTacToeView : MonoBehaviour
         tTTGrid.OnDraw();
     }
 
+    // This method initializes the tictactor grid and subscribes to relevant delegates
     void InitializeGrid()
     {
         tTTGrid = new TicTacToeGrid(inputRows, inputColumns);
@@ -43,6 +44,7 @@ public class TicTacToeView : MonoBehaviour
         tTTGrid.InitializeCells();
     }
 
+    // This method is called via a delegate to create an instance of the cell prefab
     public void OnCellCreated(Cell cell)
     {
         GameObject cellView = Instantiate(cellPrefab, this.transform.position, cellPrefab.transform.rotation);
@@ -50,11 +52,13 @@ public class TicTacToeView : MonoBehaviour
         cellView.GetComponent<UnityCell>().SetCell(cell);
     }
 
+    // This method adds row to the cells instances list
     public void AddRow()
     {
         unityCellsList.Add(new List<GameObject>());
     }
 
+    // This method alligns the grid in shape and also checks for horizontal and vertical inputs
     public void AllignGrid()
     {
         float tempLength = Mathf.Sqrt(unityCellsList.Count);
@@ -71,6 +75,7 @@ public class TicTacToeView : MonoBehaviour
         PositionCamera(GetCenterPosition());
     }
 
+    // This method calculates the position for a cell location
     Vector3 GetPosition(int x, int y)
     {
         Vector3 tempVector3 = new Vector3(unityCellsList[x][y].GetComponent<UnityCell>().cellScript.GetColumn() + horizontalDistance, 0, unityCellsList[x][y].GetComponent<UnityCell>().cellScript.GetRow() + verticalDistance);
@@ -78,22 +83,26 @@ public class TicTacToeView : MonoBehaviour
         return tempVector3;
     }
 
+    // This method increases the vertical distance for allignment according to the vertical spacing
     void IncreaseVerticalDistance()
     {
         verticalDistance = verticalDistance + verticalSpacing;
     }
 
+    // This method resets the vertical distance for allignment
     void ResetHorizontalDistance()
     {
         horizontalDistance = 0;
     }
 
+    // This method places the camera at the appropriate position
     void PositionCamera(Vector3 position)
     {
         mainCamera.transform.position = position;
         mainCamera.transform.position = new Vector3(mainCamera.transform.position.x, unityCellsList.Count + 1f + horizontalSpacing + verticalSpacing, mainCamera.transform.position.z);
     }
 
+    // This method gets the center position of all the elements of the cell instances list using Bounds class
     Vector3 GetCenterPosition()
     {
         var bounds = new Bounds(unityCellsList[0][0].transform.position, Vector3.zero);
@@ -105,5 +114,13 @@ public class TicTacToeView : MonoBehaviour
             }
         }
         return bounds.center;
+    }
+
+    // This method unsubscribes from all delegates on destroy
+    private void OnDestroy()
+    {
+        tTTGrid.onCellCreated -= OnCellCreated;
+        tTTGrid.onRowCreated -= AddRow;
+        tTTGrid.onAllCellsDone -= AllignGrid;
     }
 }

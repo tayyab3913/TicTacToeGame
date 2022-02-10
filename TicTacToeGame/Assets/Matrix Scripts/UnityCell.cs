@@ -15,6 +15,7 @@ public class UnityCell : MonoBehaviour
         cellScript.onStatusUpdate += SetState;
     }
 
+    // This method updates the visual cell based on input status
     public void SetState(Cell.Status status)
     {
         for (int i = 0; i < cellOptions.Count; i++)
@@ -29,16 +30,19 @@ public class UnityCell : MonoBehaviour
         }
     }
 
+    // This method overrides the monobehaviour function to check for mouse click
     private void OnMouseDown()
     {
         cellScript.OnInteraction();
     }
 
+    // This method unsubscribes from all delegates on destroy
     private void OnDestroy()
     {
         cellScript.onStatusUpdate -= SetState;
     }
 
+    // This method gives the cell reference to this script
     public void SetCell(Cell cellScript)
     {
         this.cellScript = cellScript;
